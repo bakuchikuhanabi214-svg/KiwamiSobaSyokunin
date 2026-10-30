@@ -13,83 +13,181 @@
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
   html,body{margin:0;height:100%;background:#2b1d14;color:#f5ead7;font-family:"Hiragino Mincho ProN","Yu Mincho","Noto Serif JP",serif;overflow:hidden;touch-action:none;overscroll-behavior:none;position:fixed;inset:0}
   #wrap{max-width:720px;margin:0 auto;height:100%;height:100dvh;display:flex;flex-direction:column;
-    padding:max(10px,env(safe-area-inset-top)) max(10px,env(safe-area-inset-right)) max(10px,env(safe-area-inset-bottom)) max(10px,env(safe-area-inset-left))}
-  header{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
-  h1{font-size:22px;margin:4px 0;letter-spacing:.1em}
-  #hud{display:flex;gap:14px;font-size:15px;font-family:system-ui,sans-serif;align-items:baseline}
+    padding:max(8px,env(safe-area-inset-top)) max(10px,env(safe-area-inset-right)) max(10px,env(safe-area-inset-bottom)) max(10px,env(safe-area-inset-left))}
+  header{display:flex;justify-content:space-between;align-items:center;gap:6px;margin-bottom:6px}
+  #hud{display:flex;gap:12px;font-size:14px;font-family:system-ui,sans-serif;align-items:baseline}
   #hud b{font-size:20px;color:#ffd27a}
-  #snd{background:none;border:1px solid #f5ead755;color:#f5ead7;font-size:14px;padding:4px 10px;margin:0;border-radius:8px;letter-spacing:0;font-family:system-ui,sans-serif}
+  .tools{display:flex;gap:6px}
+  .ic{background:#00000033;border:1px solid #f5ead755;color:#f5ead7;font-size:13px;padding:6px 9px;margin:0;border-radius:8px;letter-spacing:0;font-family:system-ui,sans-serif;white-space:nowrap}
   canvas{width:100%;display:block;border-radius:10px;flex:1;min-height:0;touch-action:none}
-  #msg{text-align:center;font-family:system-ui,sans-serif;font-size:14px;opacity:.85;margin:6px 0 2px;min-height:20px}
-  .overlay{position:fixed;inset:0;background:rgba(20,12,6,.86);display:flex;align-items:center;justify-content:center;z-index:5}
-  .card{background:#f5ead7;color:#2b1d14;border-radius:14px;padding:24px 22px;max-width:420px;width:92%;text-align:center;box-shadow:0 10px 40px #000a}
-  .card h2{margin:0 0 6px;font-size:28px;letter-spacing:.15em}
+  #msg{text-align:center;font-family:system-ui,sans-serif;font-size:14px;opacity:.85;margin:6px 0 0;min-height:20px}
+  #tutBar{position:fixed;left:50%;transform:translateX(-50%);top:calc(max(8px,env(safe-area-inset-top)) + 46px);width:min(94%,680px);
+    background:#f5ead7;color:#2b1d14;border-radius:12px;padding:10px 14px;font-family:system-ui,sans-serif;font-size:15px;line-height:1.5;
+    box-shadow:0 6px 20px #0008;z-index:4;pointer-events:none;border:3px solid #a8321e}
+  #tutBar b{color:#a8321e}
+  #tutBar .row{display:flex;justify-content:space-between;align-items:center;margin-top:4px;font-size:12px;opacity:.75}
+  #tutSkip{pointer-events:auto;background:#2b1d14;color:#f5ead7;font-size:12px;padding:4px 10px;margin:0;border-radius:6px;letter-spacing:0;font-family:system-ui,sans-serif}
+  .overlay{position:fixed;inset:0;background:rgba(20,12,6,.9);display:flex;align-items:center;justify-content:center;z-index:5;padding:12px}
+  .card{background:#f5ead7;color:#2b1d14;border-radius:14px;padding:22px 20px;max-width:430px;width:100%;text-align:center;box-shadow:0 10px 40px #000a;max-height:100%;display:flex;flex-direction:column}
+  .card h2{margin:0 0 6px;font-size:26px;letter-spacing:.15em}
   .card p{font-family:system-ui,sans-serif;font-size:14px;line-height:1.7;margin:8px 0}
+  .title{font-size:34px;letter-spacing:.12em;margin:4px 0;color:#a8321e;line-height:1.2}
   .big{font-size:56px;font-weight:bold;color:#a8321e;line-height:1.1}
-  .rank{font-size:22px;margin:4px 0 8px}
-  button{font-family:inherit;font-size:18px;padding:12px 22px;border:none;border-radius:10px;background:#a8321e;color:#fff;cursor:pointer;margin:6px 4px;letter-spacing:.1em}
-  button.sub{background:#111;font-family:system-ui,sans-serif;font-size:15px}
-  .hidden{display:none}
+  .rank{font-size:21px;margin:4px 0 6px}
+  button{font-family:inherit;font-size:18px;padding:12px 22px;border:none;border-radius:10px;background:#a8321e;color:#fff;cursor:pointer;margin:5px 4px;letter-spacing:.1em}
+  button.sub{background:#2b1d14;font-family:system-ui,sans-serif;font-size:15px;letter-spacing:0}
+  button.x{background:#111;font-family:system-ui,sans-serif;font-size:15px;letter-spacing:0}
+  button.wide{display:block;width:100%;margin:8px 0}
+  .who{font-family:system-ui,sans-serif;font-size:14px;margin:8px 0 12px;display:flex;justify-content:center;align-items:center;gap:8px}
+  .who b{font-size:17px}
+  .mini{font-size:12px!important;padding:5px 10px!important;margin:0!important;letter-spacing:0!important;background:#2b1d14!important}
+  input{font-size:18px;padding:12px;border-radius:10px;border:2px solid #2b1d14;width:100%;text-align:center;font-family:system-ui,sans-serif;user-select:text;-webkit-user-select:text;margin:10px 0}
+  .tips{text-align:left;font-size:13px;background:#e9dcc3;border-radius:8px;padding:10px 12px;font-family:system-ui,sans-serif;line-height:1.8}
+  #rankList{overflow-y:auto;touch-action:pan-y;-webkit-overflow-scrolling:touch;flex:1;min-height:120px;margin:8px 0;border-radius:8px;background:#e9dcc3;font-family:system-ui,sans-serif}
+  .rrow{display:grid;grid-template-columns:44px 1fr auto auto;gap:8px;padding:8px 10px;border-bottom:1px solid #d6c6a6;font-size:14px;align-items:center;text-align:left}
+  .rrow .n{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .rrow .s{font-weight:bold;color:#a8321e}
+  .rrow .a{font-size:12px;opacity:.7}
+  .rrow.me{background:#ffd27a}
+  .r1 .p{color:#c9a000;font-weight:bold}.r2 .p{color:#888;font-weight:bold}.r3 .p{color:#a0522d;font-weight:bold}
+  .tabs{display:flex;gap:6px;justify-content:center}
+  .tabs button{font-size:14px;padding:6px 14px;margin:0;background:#cdbf9f;color:#2b1d14;letter-spacing:0;font-family:system-ui,sans-serif}
+  .tabs button.on{background:#a8321e;color:#fff}
+  .hidden{display:none!important}
   small{opacity:.7}
-  @media (max-width:380px){ h1{font-size:18px} #hud{gap:10px;font-size:13px} #hud b{font-size:17px} }
 </style>
 </head>
 <body>
 <div id="wrap">
   <header>
-    <h1>極細そば切り名人</h1>
     <div id="hud">
       <div>本数 <b id="cnt">0</b></div>
-      <div>切れ <b id="brk">0</b>/3</div>
-      <div>最高 <b id="best">0</b></div>
-      <button id="snd">♪ ON</button>
+      <div>ぶち切れ <b id="brk">0</b>/3</div>
+    </div>
+    <div class="tools">
+      <button class="ic" id="btnRetry">↻ やり直し</button>
+      <button class="ic" id="btnHome">⌂</button>
+      <button class="ic" id="snd">♪</button>
     </div>
   </header>
   <canvas id="cv"></canvas>
-  <div id="msg">画面を長押しで包丁を送る → 離すとトン！</div>
+  <div id="msg">画面を長押しで包丁が動く → 離すとトン！</div>
 </div>
 
-<div id="start" class="overlay">
+<div id="tutBar" class="hidden">
+  <div id="tutText"></div>
+  <div class="row"><span id="tutProg"></span><button id="tutSkip">スキップ</button></div>
+</div>
+
+<!-- 名前設定 -->
+<div id="nameScr" class="overlay hidden">
   <div class="card">
-    <h2>極細そば切り</h2>
-    <p><b>長押し</b>で包丁を送り、<b>離す</b>と切ります。<br>
-    細いほど本数が増える。でも細すぎると<b style="color:#a8321e">ぶち切れ</b>！<br>
-    2.0mmを超えると「うどん」扱いで0本。切れ3回で終了。</p>
-    <p style="text-align:left;font-size:13px;background:#e9dcc3;border-radius:8px;padding:8px 12px">
-    ⚠ 包丁の送りは<b>速さが波打つ</b>うえ、切るほど加速<br>
-    ⚠ 時間が経つと<b>生地が乾いて</b>ぶち切れラインが上がる<br>
-    → 素早く、正確に、迷わず切れ！</p>
-    <button id="go">打ち始め</button>
+    <h2>名前を決めよう</h2>
+    <p>ランキングに表示される名前です（12文字まで）</p>
+    <input id="nameIn" maxlength="12" placeholder="例：そば太郎" autocomplete="off">
+    <p id="nameErr" style="color:#a8321e;min-height:20px;margin:0"></p>
+    <button id="nameOk">決定</button>
   </div>
 </div>
 
+<!-- ホーム -->
+<div id="home" class="overlay hidden">
+  <div class="card">
+    <div class="title">極細<br>そば切り名人</div>
+    <div class="who">職人名 <b id="homeName"></b> <button class="mini" id="nameEdit">変更</button></div>
+    <p style="margin:0">自己ベスト <b id="homeBest" style="font-size:20px;color:#a8321e">0</b> 本</p>
+    <button class="wide" id="go">打ち始め</button>
+    <button class="wide sub" id="openRank">🏆 ランキング</button>
+    <button class="wide sub" id="openTut">📖 遊び方（チュートリアル）</button>
+    <p><small>江戸の職人の目安は「切りべら23本」＝約1.3mm</small></p>
+  </div>
+</div>
+
+<!-- チュートリアル後の説明 -->
+<div id="tutCard" class="overlay hidden">
+  <div class="card">
+    <h2>本番のルール</h2>
+    <div class="tips">
+      🔪 <b>包丁の速さ</b>は本番だと<b>不規則に揺れて</b>、切り進むほど速くなる<br>
+      🌬 時間が経つと<b>生地が乾いて</b>、ぶち切れる太さがだんだん上がる<br>
+      💥 細すぎる「ぶち切れ」<b>3回で終了</b><br>
+      🍜 2.0mmより太いと「うどん」扱いで0本<br>
+      🏆 生地を全部切ったら完成。<b>本数</b>でランキング勝負！
+    </div>
+    <button class="wide" id="tutGo">本番に挑戦</button>
+  </div>
+</div>
+
+<!-- 結果 -->
 <div id="end" class="overlay hidden">
   <div class="card">
     <h2 id="endTitle">打ち上がり</h2>
     <div class="big"><span id="score">0</span><span style="font-size:24px">本</span></div>
     <div class="rank" id="rank"></div>
+    <p id="worldRank" style="font-weight:bold;min-height:22px;margin:2px 0"></p>
     <p id="detail"></p>
-    <button id="retry">もう一枚</button>
-    <button id="share" class="sub">𝕏 でポスト</button>
+    <div>
+      <button id="retry">もう一枚</button>
+      <button id="share" class="x">𝕏 でポスト</button>
+    </div>
+    <div>
+      <button class="sub" id="endRank">🏆 ランキング</button>
+      <button class="sub" id="endHome">⌂ ホーム</button>
+    </div>
+  </div>
+</div>
+
+<!-- ランキング -->
+<div id="rankScr" class="overlay hidden">
+  <div class="card" style="height:100%;max-height:640px">
+    <h2>ランキング</h2>
+    <div class="tabs"><button id="tabWorld" class="on">世界</button><button id="tabMine">自分の記録</button></div>
+    <div id="rankList"></div>
+    <p id="rankNote" style="margin:0;font-size:12px"></p>
+    <button id="rankClose">とじる</button>
   </div>
 </div>
 
 <script>
+// =====================================================================
+//  ★ランキング用 Firebase 設定★
+//  そば切り用 Firebase プロジェクトの firebaseConfig の { } を
+//  丸ごと null と置き換えて貼り付けてください（databaseURL 入りのもの）。
+//  null のままでもゲームは遊べます（ランキングは「自分の記録」のみ）。
+// =====================================================================
+const FIREBASE_CONFIG = {
+  apiKey: "AIzaSyAviZYH-J3MjONPQ23tcjOHavGhR-K81QI",
+  authDomain: "kiwamisobasyokunin.firebaseapp.com",
+  databaseURL: "https://kiwamisobasyokunin-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "kiwamisobasyokunin",
+  storageBucket: "kiwamisobasyokunin.firebasestorage.app",
+  messagingSenderId: "7816139816",
+  appId: "1:7816139816:web:e6faae3ebb9a87949fd11d"
+};
+
 (() => {
   // ===== 難易度設定 =====
   const DOUGH = 60;            // 生地の幅 mm
   const BREAK0 = 1.0;          // 開始時のぶち切れライン mm
-  const DRY_RATE = 0.009;      // 乾燥でラインが上がる速さ mm/秒
-  const BREAK_MAX = 1.5;      // ぶち切れラインの上限
-  const UDON = 2.0;            // これ超えでうどん
-  const SPEED_START = 3.4;     // 送り速度(開始) mm/s
-  const SPEED_END = 8.5;       // 送り速度(終盤) mm/s
-  const WOBBLE = 0.5;          // 速度の揺れ幅 (±50%)
+  const DRY_RATE = 0.009;      // 乾きでラインが上がる速さ mm/秒
+  const BREAK_MAX = 1.5;       // ぶち切れラインの上限
+  const UDON = 2.0;            // これより太いとうどん
+  const SPEED_START = 3.4;     // 包丁の速さ(開始) mm/秒
+  const SPEED_END = 8.5;       // 包丁の速さ(終盤) mm/秒
+  const WOBBLE = 0.5;          // 速さの揺れ幅 (±50%)
   const MAX_BREAKS = 3;
+  const TUT_SPEED = 1.3;       // チュートリアルの速さ
 
   const cv = document.getElementById('cv');
   const ctx = cv.getContext('2d');
   const $ = id => document.getElementById(id);
+  const show = id => $(id).classList.remove('hidden');
+  const hide = id => $(id).classList.add('hidden');
+
+  const store = {
+    get(k, d){ try{ const v = localStorage.getItem(k); return v === null ? d : JSON.parse(v); }catch(e){ return d; } },
+    set(k, v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
+  };
 
   let W = 0, H = 0, dpr = 1;
   function resize(){
@@ -101,22 +199,21 @@
   }
   window.addEventListener('resize', resize);
 
-  let best = 0;
-  try { best = +localStorage.getItem('soba_best_v2') || 0; } catch(e){}
-  $('best').textContent = best;
+  let best = store.get('soba_best_v2', 0);
+  let myName = store.get('soba_name', '');
+  let history = store.get('soba_history', []);   // 自分の記録 [{s,a,t}]
 
   // =========================================================
   //  サウンド
   // =========================================================
-  let ac = null, master, sfxBus, bgmBus, soundOn = true;
+  let ac = null, master, sfxBus, bgmBus, reverb = null, soundOn = store.get('soba_sound', true);
   function audio(){
     if(!ac){
       try{
         ac = new (window.AudioContext||window.webkitAudioContext)();
-        master = ac.createGain(); master.gain.value = 1; master.connect(ac.destination);
+        master = ac.createGain(); master.gain.value = soundOn ? 1 : 0; master.connect(ac.destination);
         sfxBus = ac.createGain(); sfxBus.gain.value = .9; sfxBus.connect(master);
         bgmBus = ac.createGain(); bgmBus.gain.value = .32; bgmBus.connect(master);
-        // 簡易リバーブ（和室っぽい響き）
         const conv = ac.createConvolver(), len = ac.sampleRate*1.6, ir = ac.createBuffer(2,len,ac.sampleRate);
         for (let c=0;c<2;c++){ const d=ir.getChannelData(c); for(let i=0;i<len;i++) d[i]=(Math.random()*2-1)*Math.pow(1-i/len,3); }
         conv.buffer = ir; reverb = ac.createGain(); reverb.gain.value = .25;
@@ -126,17 +223,14 @@
     if (ac && ac.state === 'suspended') { try{ ac.resume(); }catch(e){} }
     return ac;
   }
-  let reverb = null;
   const buzz = ms => { try{ navigator.vibrate && navigator.vibrate(ms); }catch(e){} };
   const mtof = m => 440 * Math.pow(2, (m-69)/12);
-
   function noiseBuf(dur){
     const b = ac.createBuffer(1, Math.max(1,ac.sampleRate*dur), ac.sampleRate), d = b.getChannelData(0);
     for(let i=0;i<d.length;i++) d[i] = Math.random()*2-1;
     return b;
   }
-  // フィルタ付きノイズ一発
-  function nz(t, dur, ftype, freq, q, vol, dest, decayPow=2){
+  function nz(t, dur, ftype, freq, q, vol, dest){
     const s = ac.createBufferSource(); s.buffer = noiseBuf(dur);
     const f = ac.createBiquadFilter(); f.type = ftype; f.frequency.value = freq; f.Q.value = q;
     const g = ac.createGain();
@@ -153,22 +247,18 @@
     o.connect(g).connect(dest); o.start(t); o.stop(t+dur+.02);
     return g;
   }
-
-  // ---- 効果音 ----
   function sfxCut(width, bp){
     if(!audio()) return; const t = ac.currentTime;
-    // シャッ（刃が生地を通る）
     nz(t, .045, 'highpass', 5000, .7, .35, sfxBus);
-    // トン（包丁がまな板に当たる）
     osc(t+.025, 'sine', 210, 70, .12, .9, sfxBus);
-    nz(t+.025, .06, 'bandpass', 900, 3, .5, sfxBus);   // 木の響き
-    nz(t+.025, .008, 'highpass', 3000, .5, .4, sfxBus); // アタックのカチッ
+    nz(t+.025, .06, 'bandpass', 900, 3, .5, sfxBus);
+    nz(t+.025, .008, 'highpass', 3000, .5, .4, sfxBus);
     const rel = width - bp;
-    if (rel < 0.15){ // 神切り：チーン
+    if (rel < 0.15){
       const g1 = osc(t+.05, 'sine', 2093, 0, 1.2, .18, sfxBus, .003);
       osc(t+.05, 'sine', 3136, 0, .9, .09, sfxBus, .003);
       if (reverb) g1.connect(reverb);
-    } else if (rel < 0.4){ // 名人：小さい鈴
+    } else if (rel < 0.4){
       osc(t+.05, 'sine', 1568, 0, .35, .08, sfxBus, .003);
     }
     buzz(12);
@@ -177,7 +267,7 @@
     if(!audio()) return; const t = ac.currentTime;
     nz(t, .04, 'highpass', 4000, .7, .3, sfxBus);
     osc(t+.02, 'sine', 160, 50, .2, .8, sfxBus);
-    for (let i=0;i<7;i++) nz(t+.04+i*.035+Math.random()*.02, .05, 'bandpass', 600+Math.random()*1500, 2, .35, sfxBus); // ボロボロ
+    for (let i=0;i<7;i++) nz(t+.04+i*.035+Math.random()*.02, .05, 'bandpass', 600+Math.random()*1500, 2, .35, sfxBus);
     osc(t+.05, 'sawtooth', 140, 55, .45, .12, sfxBus);
     buzz([60,40,120]);
   }
@@ -189,12 +279,12 @@
   }
   function sfxEnd(good){
     if(!audio()) return; const t = ac.currentTime;
-    // 拍子木 カン、カン
     [0, .35].forEach(d => { nz(t+d, .09, 'bandpass', 2400, 12, 1.2, sfxBus); osc(t+d, 'sine', 2400, 0, .12, .25, sfxBus); });
     if (good){ const g = osc(t+.8, 'sine', 1046, 0, 2, .2, sfxBus, .005); if (reverb) g.connect(reverb); }
   }
+  function sfxClick(){ if(!audio()) return; const t = ac.currentTime; nz(t, .05, 'bandpass', 2400, 10, .6, sfxBus); }
 
-  // ---- 和風BGM（琴＋太鼓＋拍子木）----
+  // ---- 和風BGM ----
   const ksCache = {};
   function ksBuf(midi){
     if (ksCache[midi]) return ksCache[midi];
@@ -207,7 +297,7 @@
   }
   function koto(t, midi, vol=.5, bend=false){
     const s = ac.createBufferSource(); s.buffer = ksBuf(midi);
-    if (bend){ s.playbackRate.setValueAtTime(1, t+.12); s.playbackRate.linearRampToValueAtTime(1.0595, t+.3); } // 押し手
+    if (bend){ s.playbackRate.setValueAtTime(1, t+.12); s.playbackRate.linearRampToValueAtTime(1.0595, t+.3); }
     const f = ac.createBiquadFilter(); f.type='lowpass'; f.frequency.value = 3200;
     const g = ac.createGain(); g.gain.value = vol;
     s.connect(f).connect(g).connect(bgmBus);
@@ -217,22 +307,17 @@
   function taiko(t, vol=1){ osc(t, 'sine', 110, 48, .45, vol, bgmBus, .004); nz(t, .07, 'lowpass', 700, 1, vol*.4, bgmBus); }
   function shime(t, vol=.4){ osc(t, 'sine', 330, 200, .08, vol, bgmBus); nz(t, .03, 'bandpass', 1800, 2, vol*.5, bgmBus); }
   function hyoshigi(t, vol=.5){ nz(t, .07, 'bandpass', 2400, 12, vol*2, bgmBus); }
-
-  // 都節音階 (E F A B C) のメロディ。null=休符
   const _ = null;
   const MEL = [
-    // A
     76,_,72,71, 69,_,71,_,   72,71,69,65, 64,_,_,_,
     69,_,71,72, 76,_,77,76,  72,_,71,69, 71,_,_,_,
-    // B
     69,71,72,_, 71,69,65,_,  64,65,69,_, 65,64,59,_,
     64,_,65,69, 71,_,72,71,  69,_,65,_,  64,_,_,_,
-    // C（盛り上がり）
     81,_,77,76, 77,_,76,72,  71,72,76,_, 72,71,69,_,
     76,77,76,72, 71,_,69,71, 72,_,71,_,  69,65,64,_,
   ];
-  const BENDS = new Set([5, 22, 38, 54, 70]);   // 押し手を入れる位置
-  const BASS = [52, 52, 47, 47, 45, 45, 47, 47, 52,52,45,45, 47,47,52,52, 57,57,52,52, 53,53,52,52];
+  const BENDS = new Set([5, 22, 38, 54, 70]);
+  const BASS = [52,52,47,47,45,45,47,47,52,52,45,45,47,47,52,52,57,57,52,52,53,53,52,52];
   let bgmTimer = null, bgmStep = 0, bgmNext = 0, bgmIntensity = 0;
   function bgmStart(){
     if (!audio() || bgmTimer) return;
@@ -242,14 +327,12 @@
   function bgmStop(){ if (bgmTimer){ clearInterval(bgmTimer); bgmTimer = null; } }
   function bgmTick(){
     if (!soundOn) { bgmNext = ac.currentTime + .1; return; }
-    const bpm = 88 + bgmIntensity*38;
-    const stepDur = 60/bpm/2;   // 8分音符
+    const stepDur = 60/(88 + bgmIntensity*38)/2;
     while (bgmNext < ac.currentTime + .12){
       const i = bgmStep % MEL.length, inBar = i % 8, t = bgmNext;
       const m = MEL[i];
       if (m) koto(t, m, .42, BENDS.has(i));
       if (inBar % 4 === 0){ const bn = BASS[Math.floor(i/4) % BASS.length]; koto(t, bn - 12, .38); if (inBar===0) koto(t, bn, .2); }
-      // 打楽器
       if (inBar === 0) taiko(t, .9);
       if (inBar === 4 && bgmIntensity > .25) taiko(t, .6);
       if (inBar === 6) shime(t, .35);
@@ -260,31 +343,215 @@
       bgmStep++; bgmNext += stepDur;
     }
   }
+  function updSnd(){ $('snd').textContent = soundOn ? '♪' : '🔇'; }
   $('snd').onclick = e => {
     e.stopPropagation(); audio();
-    soundOn = !soundOn;
+    soundOn = !soundOn; store.set('soba_sound', soundOn);
     if (master) master.gain.value = soundOn ? 1 : 0;
-    $('snd').textContent = soundOn ? '♪ ON' : '♪ OFF';
+    updSnd();
   };
+  updSnd();
 
   // =========================================================
-  //  ゲーム
+  //  Firebase ランキング
   // =========================================================
-  let state = 'title';
-  let pos, w, holding, strands, good, breaks, combo, maxCombo, knifeDrop, shake, popups, startT, phase, holdT;
+  let db = null, uid = null, fbState = FIREBASE_CONFIG ? 'loading' : 'off';
+  const FB_VER = '10.12.2';
+  function loadScript(src){ return new Promise((ok, ng) => { const s = document.createElement('script'); s.src = src; s.onload = ok; s.onerror = ng; document.head.appendChild(s); }); }
+  async function initFirebase(){
+    if (!FIREBASE_CONFIG) return;
+    try{
+      const base = `https://www.gstatic.com/firebasejs/${FB_VER}/`;
+      await loadScript(base + 'firebase-app-compat.js');
+      await loadScript(base + 'firebase-auth-compat.js');
+      await loadScript(base + 'firebase-database-compat.js');
+      const cfg = FIREBASE_CONFIG;
+      if (!cfg.databaseURL) throw new Error('databaseURL がありません');
+      const app = firebase.initializeApp(cfg);
+      db = app.database();
+      app.auth().onAuthStateChanged(u => {
+        if (u){ uid = u.uid; fbState = 'ready'; flushPending(); }
+      });
+      await app.auth().signInAnonymously();
+    }catch(e){ console.warn('firebase', e); fbState = 'error'; }
+  }
+  let pending = null;
+  function flushPending(){ if (pending){ const p = pending; pending = null; submitScore(p.s, p.a); } }
+  async function submitScore(score, avg){
+    if (score <= 0) return null;
+    if (fbState !== 'ready'){ pending = {s:score, a:avg}; return null; }
+    try{
+      const ref = db.ref('soba/scores/' + uid);
+      const snap = await ref.once('value');
+      const cur = snap.val();
+      const better = !cur || score > cur.score || (score === cur.score && avg < cur.avg);
+      if (better){
+        await ref.set({ name: myName, score, avg: Math.round(avg*100)/100, t: firebase.database.ServerValue.TIMESTAMP });
+      }
+      return true;
+    }catch(e){ console.warn('submit', e); return null; }
+  }
+  async function renameOnline(){
+    if (fbState !== 'ready') return;
+    try{
+      const ref = db.ref('soba/scores/' + uid);
+      const snap = await ref.once('value');
+      if (snap.exists()) await ref.child('name').set(myName);
+    }catch(e){ console.warn('rename', e); }
+  }
+  async function fetchRanking(){
+    if (fbState !== 'ready') return null;
+    try{
+      const snap = await db.ref('soba/scores').orderByChild('score').limitToLast(100).once('value');
+      const list = [];
+      snap.forEach(c => { const v = c.val(); if (v && typeof v.score === 'number') list.push({ id:c.key, name:String(v.name||'名無し'), score:v.score, avg:+v.avg||0 }); });
+      list.sort((a,b) => b.score - a.score || a.avg - b.avg);
+      return list;
+    }catch(e){ console.warn('rank', e); return null; }
+  }
+
+  // =========================================================
+  //  画面遷移
+  // =========================================================
+  let state = 'home';
+  const OVERLAYS = ['nameScr','home','tutCard','end','rankScr'];
+  function only(id){ OVERLAYS.forEach(o => o === id ? show(o) : hide(o)); }
+
+  function goHome(){
+    bgmStop(); holding = false; state = 'home'; hide('tutBar');
+    $('homeName').textContent = myName; $('homeBest').textContent = best;
+    only('home');
+  }
+  function openName(){
+    state = 'name';
+    $('nameIn').value = myName; $('nameErr').textContent = '';
+    only('nameScr');
+    setTimeout(() => { try{ $('nameIn').focus(); }catch(e){} }, 50);
+  }
+  $('nameOk').onclick = () => {
+    sfxClick();
+    const v = $('nameIn').value.replace(/[\u0000-\u001f<>]/g,'').trim().slice(0,12);
+    if (!v){ $('nameErr').textContent = '名前を入れてください'; return; }
+    const changed = v !== myName;
+    myName = v; store.set('soba_name', myName);
+    try{ $('nameIn').blur(); }catch(e){}
+    if (changed) renameOnline();
+    if (!store.get('soba_tut', false)) startTutorial(); else goHome();
+  };
+  $('nameIn').addEventListener('keydown', e => { if (e.key === 'Enter') $('nameOk').click(); });
+  $('nameEdit').onclick = () => { sfxClick(); openName(); };
+  $('go').onclick = () => startGame();
+  $('openTut').onclick = () => startTutorial();
+  $('openRank').onclick = () => openRanking('home');
+  $('endRank').onclick = () => openRanking('end');
+  $('endHome').onclick = () => goHome();
+  $('retry').onclick = () => startGame();
+  $('btnHome').onclick = e => { e.stopPropagation(); sfxClick(); goHome(); };
+  $('btnRetry').onclick = e => {
+    e.stopPropagation(); sfxClick();
+    if (mode === 'tutorial') startTutorial(); else startGame();
+  };
+  $('tutSkip').onclick = e => { e.stopPropagation(); finishTutorial(); };
+  $('tutGo').onclick = () => { store.set('soba_tut', true); startGame(); };
+
+  // ---- ランキング画面 ----
+  let rankBack = 'home', rankTab = 'world';
+  function openRanking(from){
+    sfxClick(); rankBack = from; state = 'rank'; only('rankScr');
+    setTab('world');
+  }
+  $('rankClose').onclick = () => { sfxClick(); if (rankBack === 'end'){ state = 'end'; only('end'); } else goHome(); };
+  $('tabWorld').onclick = () => setTab('world');
+  $('tabMine').onclick = () => setTab('mine');
+  function row(pos, name, score, avg, me){
+    const d = document.createElement('div');
+    d.className = 'rrow' + (me ? ' me' : '') + (pos <= 3 ? ' r' + pos : '');
+    const medal = pos === 1 ? '🥇' : pos === 2 ? '🥈' : pos === 3 ? '🥉' : pos + '位';
+    [['p', medal], ['n', name], ['s', score + '本'], ['a', avg ? avg.toFixed(2) + 'mm' : '']].forEach(([c, t]) => {
+      const s = document.createElement('span'); s.className = c; s.textContent = t; d.appendChild(s);
+    });
+    return d;
+  }
+  async function setTab(t){
+    rankTab = t;
+    $('tabWorld').classList.toggle('on', t === 'world');
+    $('tabMine').classList.toggle('on', t === 'mine');
+    const box = $('rankList'); box.innerHTML = '';
+    const note = $('rankNote');
+    if (t === 'mine'){
+      note.textContent = 'この端末で遊んだ記録のベスト10';
+      if (!history.length){ box.innerHTML = '<p style="padding:16px">まだ記録がありません</p>'; return; }
+      history.forEach((h, i) => box.appendChild(row(i+1, new Date(h.t).toLocaleDateString('ja-JP'), h.s, h.a, false)));
+      return;
+    }
+    if (fbState === 'off'){ box.innerHTML = '<p style="padding:16px">世界ランキングは準備中です🙏<br>「自分の記録」タブで記録を見られます</p>'; note.textContent = ''; return; }
+    box.innerHTML = '<p style="padding:16px">読み込み中…</p>';
+    // 準備待ち（最大4秒）
+    for (let i=0; i<20 && fbState === 'loading'; i++) await new Promise(r => setTimeout(r, 200));
+    const list = await fetchRanking();
+    if (rankTab !== 'world') return;
+    box.innerHTML = '';
+    if (!list){ box.innerHTML = '<p style="padding:16px">ランキングを読み込めませんでした。<br>通信状況を確認してください</p>'; note.textContent=''; return; }
+    if (!list.length){ box.innerHTML = '<p style="padding:16px">まだ誰も載っていません。一番乗りのチャンス！</p>'; }
+    let myPos = 0;
+    list.forEach((r, i) => { const me = r.id === uid; if (me) myPos = i+1; box.appendChild(row(i+1, r.name, r.score, r.avg, me)); });
+    note.textContent = myPos ? `あなたは ${myPos}位（${list.length}人中）` : '上位100人を表示中・同じ本数なら平均が細い方が上';
+    const meRow = box.querySelector('.me'); if (meRow) meRow.scrollIntoView({block:'center'});
+  }
+
+  // =========================================================
+  //  ゲーム本体
+  // =========================================================
+  let mode = 'normal';
+  let pos, w, holding = false, strands, good, breaks, combo, maxCombo, knifeDrop, shake, popups, startT, phase;
+  let tutStep = 0, tutOk = 0;
 
   function reset(){
     pos = 0; w = 0; holding = false; strands = []; good = 0; breaks = 0;
     combo = 0; maxCombo = 0; knifeDrop = 0; shake = 0; popups = []; startT = performance.now();
-    phase = Math.random()*Math.PI*2; holdT = 0;
+    phase = Math.random()*Math.PI*2;
     updateHud();
   }
   function updateHud(){ $('cnt').textContent = good; $('brk').textContent = breaks; }
 
+  function startGame(){
+    audio(); sfxClick();
+    mode = 'normal'; reset(); state = 'play'; bgmIntensity = 0;
+    only(null); hide('tutBar'); $('btnRetry').classList.remove('hidden');
+    bgmStop(); bgmStart();
+    $('msg').textContent = '画面を長押しで包丁が動く → 離すとトン！';
+  }
+
+  // ---- チュートリアル ----
+  const TUT = [
+    '<b>①</b> 画面のどこでもいいので<b>長押し</b>してみよう。包丁が右へ動くよ！',
+    '<b>②</b> 下のゲージの<b>白い棒＝いまの太さ</b>。<b style="color:#2f8a3e">緑</b>か<b style="color:#b8860b">金色</b>のところで<b>指を離そう</b>！',
+    '<b>③</b> <b style="color:#b8860b">金色＝神切り</b>。赤（ぶち切れ）ぎりぎりを狙ってみよう！',
+  ];
+  function startTutorial(){
+    audio(); sfxClick();
+    mode = 'tutorial'; reset(); state = 'play'; tutStep = 0; tutOk = 0; bgmIntensity = 0;
+    only(null); show('tutBar');
+    bgmStop(); bgmStart();
+    setTut();
+    $('msg').textContent = 'チュートリアル中（失敗してもOK）';
+  }
+  function setTut(){
+    $('tutText').innerHTML = TUT[tutStep];
+    const need = tutStep === 1 ? `成功 ${tutOk}/2` : tutStep === 2 ? `神切り or 名人 ${tutOk}/1` : '';
+    $('tutProg').textContent = `ステップ ${tutStep+1}/3　${need}`;
+  }
+  function finishTutorial(){
+    holding = false; hide('tutBar'); bgmStop();
+    store.set('soba_tut', true);
+    state = 'tutcard'; only('tutCard');
+  }
+
+  // ---- 速さ・乾き ----
   const elapsed = () => (performance.now() - startT)/1000;
-  const breakAt = () => Math.min(BREAK_MAX, BREAK0 + elapsed()*DRY_RATE);
-  // 送り速度：進むほど加速＋波打つ
+  const breakAt = () => mode === 'tutorial' ? BREAK0 : Math.min(BREAK_MAX, BREAK0 + elapsed()*DRY_RATE);
   function curSpeed(){
+    if (mode === 'tutorial') return TUT_SPEED;
     const base = SPEED_START + (SPEED_END - SPEED_START) * (pos / DOUGH);
     const t = performance.now()/1000;
     const wob = Math.sin(t*4.3 + phase)*0.65 + Math.sin(t*7.1 + phase*1.7)*0.35;
@@ -294,7 +561,8 @@
   function press(){
     audio();
     if (state !== 'play' || holding) return;
-    holding = true; w = 0; holdT = 0;
+    holding = true; w = 0;
+    if (mode === 'tutorial' && tutStep === 0){ tutStep = 1; setTut(); }
   }
   function release(){
     if (state !== 'play' || !holding) return;
@@ -305,10 +573,31 @@
   function cut(){
     const width = Math.min(w, DOUGH - pos);
     const bp = breakAt();
-    let kind;
-    if (width < bp) kind = 'break';
-    else if (width > UDON) kind = 'udon';
-    else kind = 'ok';
+    const kind = width < bp ? 'break' : width > UDON ? 'udon' : 'ok';
+    const now = performance.now();
+
+    if (mode === 'tutorial'){
+      w = 0; knifeDrop = 1;
+      if (kind === 'break'){
+        sfxBreak(); shake = .5;
+        popups.push({text:'細すぎ！ 本番ならぶち切れ', t:now, color:'#ff6a50'});
+        return;
+      }
+      if (kind === 'udon'){
+        sfxUdon();
+        popups.push({text:'太すぎ！ 本番ならうどん(0本)', t:now, color:'#bbb'});
+        return;
+      }
+      strands.push({x:pos, w:width, kind, seed:Math.random()*1000});
+      pos += width; good++; updateHud(); sfxCut(width, bp);
+      const rel = width - bp;
+      popups.push({text:(rel<.15?'神切り！ ':rel<.4?'名人！ ':'OK ')+width.toFixed(2)+'mm', t:now, color: rel<.15?'#ffd27a':'#fff'});
+      if (tutStep === 1){ tutOk++; if (tutOk >= 2){ tutStep = 2; tutOk = 0; } setTut(); }
+      else if (tutStep === 2 && rel < .4){ tutOk = 1; setTut(); setTimeout(finishTutorial, 900); }
+      if (DOUGH - pos < 3){ pos = 0; strands = []; }  // 生地が尽きたら補充
+      return;
+    }
+
     strands.push({x:pos, w:width, kind, seed:Math.random()*1000});
     pos += width; w = 0; knifeDrop = 1;
     if (kind === 'ok'){
@@ -317,31 +606,49 @@
       let label = width.toFixed(2)+'mm', color = '#fff';
       if (rel < 0.15){ label = '神切り！ '+label; color = '#ffd27a'; }
       else if (rel < 0.4) label = '名人 '+label;
-      popups.push({text:label, t:performance.now(), color});
+      popups.push({text:label, t:now, color});
     } else if (kind === 'break'){
       breaks++; combo = 0; shake = 1; sfxBreak();
-      popups.push({text:'ぶち切れ！ '+width.toFixed(2)+'mm', t:performance.now(), color:'#ff6a50'});
-      $('msg').textContent = `切れ ${breaks}/${MAX_BREAKS}`;
+      popups.push({text:'ぶち切れ！ '+width.toFixed(2)+'mm', t:now, color:'#ff6a50'});
+      $('msg').textContent = `ぶち切れ ${breaks}/${MAX_BREAKS}`;
     } else {
       combo = 0; sfxUdon();
-      popups.push({text:'うどん… '+width.toFixed(2)+'mm', t:performance.now(), color:'#bbb'});
+      popups.push({text:'うどん… '+width.toFixed(2)+'mm', t:now, color:'#bbb'});
     }
     updateHud();
     if (breaks >= MAX_BREAKS) return finish('生地崩壊');
     if (DOUGH - pos < breakAt()) return finish('打ち上がり');
   }
-  function finish(title){
-    state = 'end';
+
+  let lastGood = 0, lastRankText = '';
+  async function finish(title){
+    state = 'end'; holding = false;
     const oks = strands.filter(s=>s.kind==='ok');
     const avg = oks.length ? oks.reduce((a,s)=>a+s.w,0)/oks.length : 0;
     const isBest = good > best;
-    if (isBest){ best = good; try{ localStorage.setItem('soba_best_v2', best); }catch(e){} $('best').textContent = best; }
+    if (isBest){ best = good; store.set('soba_best_v2', best); }
+    if (good > 0){
+      history.push({s:good, a:Math.round(avg*100)/100, t:Date.now()});
+      history.sort((a,b) => b.s - a.s || a.a - b.a);
+      history = history.slice(0,10); store.set('soba_history', history);
+    }
+    lastGood = good; lastRankText = '';
     $('endTitle').textContent = title;
     $('score').textContent = good;
     $('rank').textContent = rankOf(good) + (isBest && good>0 ? ' 🎉自己ベスト' : '');
     $('detail').innerHTML = `平均の太さ <b>${avg.toFixed(2)}mm</b>　最大連続 <b>${maxCombo}</b>本<br>ぶち切れ ${breaks}回 / うどん ${strands.filter(s=>s.kind==='udon').length}本 / ${elapsed().toFixed(1)}秒`;
+    $('worldRank').textContent = fbState === 'off' ? '' : '世界ランキング集計中…';
     bgmStop(); sfxEnd(title === '打ち上がり');
-    setTimeout(()=>$('end').classList.remove('hidden'), 900);
+    setTimeout(() => { if (state === 'end') only('end'); }, 900);
+    if (fbState !== 'off'){
+      await submitScore(good, avg);
+      const list = await fetchRanking();
+      if (list){
+        const i = list.findIndex(r => r.id === uid);
+        lastRankText = i >= 0 ? `世界${i+1}位` : '';
+        $('worldRank').textContent = i >= 0 ? `🏆 世界ランキング ${i+1}位（自己ベストで登録）` : (good > 0 ? '世界ランキング：100位圏外' : '');
+      } else $('worldRank').textContent = '';
+    }
   }
   function rankOf(n){
     if (n >= 40) return '【伝説】更科の神';
@@ -351,15 +658,14 @@
     if (n >= 14) return '【素人】田舎そば';
     return '【論外】それはすいとん';
   }
-  function startGame(){
-    audio();
-    $('start').classList.add('hidden'); $('end').classList.add('hidden');
-    reset(); state = 'play'; bgmIntensity = 0; bgmStart();
-    $('msg').textContent = '画面を長押しで包丁を送る → 離すとトン！';
-  }
+  $('share').onclick = () => {
+    const text = `極細そば切り名人で ${lastGood}本 切った！${lastRankText ? '（'+lastRankText+'）' : ''}\n${rankOf(lastGood)}\n#極細そば切り名人`;
+    const url = location.href.split('#')[0].split('?')[0];
+    window.open('https://x.com/intent/post?text='+encodeURIComponent(text)+'&url='+encodeURIComponent(url), '_blank');
+  };
 
-  // ---- input ----
-  const isUI = t => t.closest && t.closest('button, .overlay');
+  // ---- 入力 ----
+  const isUI = t => t.closest && t.closest('button, input, .overlay');
   document.addEventListener('touchstart', e => {
     if (isUI(e.target)) return;
     e.preventDefault(); press();
@@ -374,52 +680,50 @@
   window.addEventListener('pointerup', e => { if (e.pointerType !== 'touch') release(); });
   window.addEventListener('blur', release);
   document.addEventListener('visibilitychange', () => { if (document.hidden) release(); });
-  document.addEventListener('contextmenu', e => e.preventDefault());
+  document.addEventListener('contextmenu', e => { if (!isUI(e.target)) e.preventDefault(); });
   document.addEventListener('gesturestart', e => e.preventDefault());
   document.addEventListener('dblclick', e => e.preventDefault());
-  window.addEventListener('keydown', e => { if (e.code==='Space'){ e.preventDefault(); if(!e.repeat) press(); }});
-  window.addEventListener('keyup', e => { if (e.code==='Space'){ e.preventDefault(); release(); }});
+  window.addEventListener('keydown', e => { if (e.code==='Space' && state==='play'){ e.preventDefault(); if(!e.repeat) press(); }});
+  window.addEventListener('keyup', e => { if (e.code==='Space' && state==='play'){ e.preventDefault(); release(); }});
 
-  $('go').onclick = startGame;
-  $('retry').onclick = startGame;
-  $('share').onclick = () => {
-    const text = `極細そば切り名人で ${good}本 切った！\n${rankOf(good)}\n#極細そば切り名人`;
-    const url = location.href.split('#')[0];
-    window.open('https://x.com/intent/post?text='+encodeURIComponent(text)+'&url='+encodeURIComponent(url), '_blank');
-  };
-
-  // ---- draw ----
+  // =========================================================
+  //  描画
+  // =========================================================
   function rand(seed){ const x = Math.sin(seed)*10000; return x - Math.floor(x); }
+  function roundRect(x,y,w,h,r){ ctx.beginPath(); ctx.moveTo(x+r,y); ctx.arcTo(x+w,y,x+w,y+h,r); ctx.arcTo(x+w,y+h,x,y+h,r); ctx.arcTo(x,y+h,x,y,r); ctx.arcTo(x,y,x+w,y,r); ctx.closePath(); }
+  function meter(x, y, w, h, ratio, color){
+    ctx.fillStyle = 'rgba(255,255,255,.15)'; roundRect(x, y, w, h, h/2); ctx.fill();
+    ctx.fillStyle = color; roundRect(x, y, Math.max(h, w*Math.min(1,ratio)), h, h/2); ctx.fill();
+  }
 
   function draw(now, dt){
     const playing = state === 'play';
     if (playing){
-      bgmIntensity = pos / DOUGH;
+      if (mode === 'normal') bgmIntensity = pos / DOUGH;
       if (holding){
-        w += curSpeed() * dt; holdT += dt;
-        if (pos + w >= DOUGH){ w = DOUGH - pos; holding=false; cut(); }
+        w += curSpeed() * dt;
+        if (pos + w >= DOUGH){ w = DOUGH - pos; holding = false; cut(); }
+        if (mode === 'tutorial' && w > 3){ holding = false; cut(); }
       }
     }
     knifeDrop = Math.max(0, knifeDrop - dt*6);
     shake = Math.max(0, shake - dt*3);
-    const bp = playing ? breakAt() : BREAK0;
+    const bp = (playing || state === 'end') ? breakAt() : BREAK0;
 
     ctx.clearRect(0,0,W,H);
     ctx.save();
     if (shake) ctx.translate((Math.random()-.5)*12*shake, (Math.random()-.5)*8*shake);
 
-    // まな板
     const g = ctx.createLinearGradient(0,0,0,H);
     g.addColorStop(0,'#c99a5e'); g.addColorStop(1,'#a87a42');
     ctx.fillStyle = g; ctx.fillRect(0,0,W,H);
     ctx.strokeStyle = 'rgba(90,55,20,.18)'; ctx.lineWidth = 1;
     for (let i=0;i<14;i++){ ctx.beginPath(); const y=H*i/14+8; ctx.moveTo(0,y); ctx.bezierCurveTo(W*.3,y+6,W*.6,y-6,W,y+3); ctx.stroke(); }
 
-    const topH = H*0.58, pad = 20;
+    const topH = H*0.55, pad = 20;
     const scale = (W - pad*2) / DOUGH;
-    const dX = pad, dY = topH*0.18, dH = topH*0.62;
+    const dX = pad, dY = mode === 'tutorial' && playing ? topH*0.34 : topH*0.18, dH = topH - dY - 30;
 
-    // 切った麺
     for (const s of strands){
       const x = dX + s.x*scale, sw = Math.max(1, s.w*scale - 1.5);
       if (s.kind==='break'){
@@ -437,7 +741,6 @@
         ctx.fillRect(x, dY+dH+4, Math.max(1,s.w*scale-1), 3);
       }
     }
-    // 残りの生地（乾くほど白っぽく）
     const rx = dX + pos*scale, dry = (bp - BREAK0)/(BREAK_MAX - BREAK0);
     const dg = ctx.createLinearGradient(0,dY,0,dY+dH);
     dg.addColorStop(0,'#d9c697'); dg.addColorStop(.5,'#cbb683'); dg.addColorStop(1,'#bba571');
@@ -445,7 +748,7 @@
     if (dry > 0){ ctx.fillStyle = `rgba(245,240,225,${dry*.45})`; ctx.fillRect(rx, dY, dX + DOUGH*scale - rx, dH); }
     ctx.fillStyle='rgba(60,40,10,.25)';
     for (let i=0;i<120;i++){ const px = dX + rand(i)*DOUGH*scale; if (px<rx) continue; ctx.fillRect(px, dY + rand(i*1.7)*dH, 1.5, 1.5); }
-    if (dry > .3){ // ひび割れ
+    if (dry > .3){
       ctx.strokeStyle = `rgba(110,80,40,${(dry-.3)*.6})`; ctx.lineWidth = 1;
       for (let i=0;i<10;i++){ const px = dX + rand(i*9.1)*DOUGH*scale; if (px<rx) continue; const py = dY + rand(i*3.3)*dH;
         ctx.beginPath(); ctx.moveTo(px,py); ctx.lineTo(px+6,py+5); ctx.lineTo(px+3,py+12); ctx.stroke(); }
@@ -454,72 +757,86 @@
     ctx.beginPath(); ctx.moveTo(rx, dY+dH*.5); ctx.lineTo(dX+DOUGH*scale, dY+dH*.5); ctx.stroke();
 
     // 駒板と包丁
-    if (state==='play' || state==='end'){
-      const kx = dX + (pos + w)*scale;
-      ctx.fillStyle = 'rgba(60,35,15,.9)';
-      ctx.fillRect(kx+2, dY-14, Math.min(60, W-kx), dH+28);
-      ctx.fillStyle = '#8a5a2b'; ctx.fillRect(kx+2, dY-14, Math.min(60, W-kx), 6);
-      const lift = holding ? 10 : 10*knifeDrop;
-      ctx.fillStyle = '#d6dde3';
-      ctx.beginPath();
-      ctx.moveTo(kx-1, dY-26-lift); ctx.lineTo(kx+1, dY-26-lift);
-      ctx.lineTo(kx+1, dY+dH+18-lift); ctx.lineTo(kx-6, dY+dH+18-lift); ctx.lineTo(kx-6, dY-26-lift); ctx.closePath(); ctx.fill();
-      ctx.fillStyle = '#2b1d14'; ctx.fillRect(kx-7, dY-40-lift, 9, 16);
-      ctx.strokeStyle = holding ? '#ffd27a' : 'rgba(255,255,255,.6)'; ctx.lineWidth = 1;
-      ctx.beginPath(); ctx.moveTo(kx, dY-26-lift); ctx.lineTo(kx, dY+dH+18-lift); ctx.stroke();
-    }
+    const kx = dX + (pos + w)*scale;
+    ctx.fillStyle = 'rgba(60,35,15,.9)';
+    ctx.fillRect(kx+2, dY-14, Math.min(60, W-kx), dH+28);
+    ctx.fillStyle = '#8a5a2b'; ctx.fillRect(kx+2, dY-14, Math.min(60, W-kx), 6);
+    const lift = holding ? 10 : 10*knifeDrop;
+    ctx.fillStyle = '#d6dde3';
+    ctx.beginPath();
+    ctx.moveTo(kx-1, dY-26-lift); ctx.lineTo(kx+1, dY-26-lift);
+    ctx.lineTo(kx+1, dY+dH+18-lift); ctx.lineTo(kx-6, dY+dH+18-lift); ctx.lineTo(kx-6, dY-26-lift); ctx.closePath(); ctx.fill();
+    ctx.fillStyle = '#2b1d14'; ctx.fillRect(kx-7, dY-40-lift, 9, 16);
+    ctx.strokeStyle = holding ? '#ffd27a' : 'rgba(255,255,255,.6)'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(kx, dY-26-lift); ctx.lineTo(kx, dY+dH+18-lift); ctx.stroke();
 
     ctx.fillStyle='rgba(43,29,20,.85)'; ctx.font='13px system-ui,sans-serif'; ctx.textAlign='right';
-    ctx.fillText(`残り ${(DOUGH-pos).toFixed(1)}mm`, W-pad, dY-20);
+    if (mode === 'normal') ctx.fillText(`残りの生地 ${(DOUGH-pos).toFixed(1)}mm`, W-pad, dY-20);
     ctx.textAlign='left';
-    if (combo>=3) ctx.fillText(`${combo}本連続`, pad, dY-20);
+    if (combo>=3 && mode==='normal') ctx.fillText(`${combo}本連続！`, pad, dY-20);
 
-    // ---- 拡大ゲージ ----
-    const gy = topH + 10, gh = H - gy - 12, gx = 14, gw = W - 28;
+    // ---- 太さゲージ ----
+    const gy = topH + 8, gh = H - gy - 10, gx = 10, gw = W - 20;
     ctx.fillStyle = 'rgba(30,20,12,.9)';
     roundRect(gx, gy, gw, gh, 10); ctx.fill();
-    const maxMM = 2.5, gs = (gw-30)/maxMM, bx = gx+15, by = gy + gh*0.42, bh = gh*0.26;
-    const zone = (a,b,c) => { if (b<=a) return; ctx.fillStyle=c; ctx.fillRect(bx+a*gs, by, (b-a)*gs, bh); };
-    zone(0, bp, 'rgba(200,50,30,.6)');
-    zone(bp, bp+.15, 'rgba(255,210,122,.8)');
-    zone(bp+.15, bp+.4, 'rgba(80,180,90,.65)');
-    zone(bp+.4, UDON, 'rgba(160,150,110,.4)');
-    zone(UDON, maxMM, 'rgba(120,120,120,.3)');
-    ctx.fillStyle='#f5ead7'; ctx.font='11px system-ui,sans-serif'; ctx.textAlign='center';
-    for (let m=0; m<=maxMM+1e-9; m+=0.5){ const x=bx+m*gs; ctx.fillRect(x, by+bh, 1, 6); ctx.fillText(m.toFixed(1), x, by+bh+18); }
-    ctx.font='bold 11px system-ui,sans-serif';
-    ctx.fillStyle='#ff8a70'; ctx.fillText('ぶち切れ', bx+bp/2*gs, by-6);
-    ctx.fillStyle='#ffd27a'; ctx.fillText('神', bx+(bp+.075)*gs, by-6);
-    ctx.fillStyle='#8fe09a'; ctx.fillText('名人', bx+(bp+.275)*gs, by-6);
-    ctx.fillStyle='#ccc'; ctx.fillText('うどん', bx+(UDON+maxMM)/2*gs, by-6);
     const cw = holding ? w : (strands.length ? strands[strands.length-1].w : 0);
+    // 左上：いまの太さ
+    ctx.textAlign='left'; ctx.fillStyle='rgba(245,234,215,.7)'; ctx.font='12px system-ui,sans-serif';
+    ctx.fillText(holding ? 'いまの太さ' : '前の太さ', gx+12, gy+18);
+    ctx.font = 'bold 26px system-ui,sans-serif';
+    ctx.fillStyle = cw > 0 && cw < bp ? '#ff8a70' : cw > UDON ? '#ccc' : '#fff';
+    ctx.fillText(cw.toFixed(2)+'mm', gx+12, gy+46);
+    // 右上：包丁の速さ・生地の乾き
+    const sp = curSpeed(), mw = Math.min(110, gw*0.28), mx = gx+gw-12-mw;
+    const spWord = sp < 3 ? 'ゆっくり' : sp < 5 ? 'ふつう' : sp < 7 ? 'はやい' : '激はや！';
+    const spCol = sp < 3 ? '#8fe09a' : sp < 5 ? '#ffd27a' : sp < 7 ? '#ffa860' : '#ff6a50';
+    ctx.font='12px system-ui,sans-serif'; ctx.textAlign='right';
+    ctx.fillStyle='rgba(245,234,215,.85)'; ctx.fillText('包丁の速さ', mx-6, gy+19);
+    meter(mx, gy+10, mw, 10, sp/10, spCol);
+    ctx.fillStyle = spCol; ctx.textAlign='left'; ctx.font='bold 11px system-ui,sans-serif';
+    ctx.fillText(spWord, mx, gy+33);
+    if (mode === 'normal'){
+      ctx.font='12px system-ui,sans-serif'; ctx.textAlign='right';
+      ctx.fillStyle='rgba(245,234,215,.85)'; ctx.fillText('生地の乾き', mx-6, gy+50);
+      meter(mx, gy+41, mw, 10, dry, dry > .5 ? '#ff6a50' : '#c9b48a');
+      ctx.fillStyle = dry > .5 ? '#ff8a70' : 'rgba(245,234,215,.7)'; ctx.textAlign='right'; ctx.font='11px system-ui,sans-serif';
+      ctx.fillText(`${bp.toFixed(2)}mm未満だと切れる`, mx+mw, gy+66);
+    }
+    // ゾーン
+    const maxMM = 2.5, gs = (gw-30)/maxMM, bx = gx+15, by = gy + Math.max(88, gh*0.5), bh = Math.min(34, gh*0.22);
+    const zone = (a,b,c) => { if (b<=a) return; ctx.fillStyle=c; ctx.fillRect(bx+a*gs, by, (b-a)*gs, bh); };
+    zone(0, bp, 'rgba(200,50,30,.65)');
+    zone(bp, bp+.15, 'rgba(255,210,122,.85)');
+    zone(bp+.15, bp+.4, 'rgba(80,180,90,.7)');
+    zone(bp+.4, UDON, 'rgba(160,150,110,.45)');
+    zone(UDON, maxMM, 'rgba(120,120,120,.35)');
+    ctx.fillStyle='#f5ead7'; ctx.font='11px system-ui,sans-serif'; ctx.textAlign='center';
+    for (let m=0; m<=maxMM+1e-9; m+=0.5){ const x=bx+m*gs; ctx.fillRect(x, by+bh, 1, 6); ctx.fillText(m.toFixed(1)+(m===0?'':''), x, by+bh+18); }
+    ctx.font='bold 11px system-ui,sans-serif';
+    ctx.fillStyle='#ff8a70'; ctx.fillText('細すぎ(切れる)', bx+bp/2*gs, by-7);
+    ctx.fillStyle='#ffd27a'; ctx.fillText('神', bx+(bp+.075)*gs, by-7);
+    ctx.fillStyle='#8fe09a'; ctx.fillText('名人', bx+(bp+.275)*gs, by-7);
+    ctx.fillStyle='#d8cfb4'; if ((UDON-bp-.4)*gs > 40) ctx.fillText('ふつう', bx+(bp+.4+UDON)/2*gs, by-7);
+    ctx.fillStyle='#bbb'; ctx.fillText('うどん', bx+(UDON+maxMM)/2*gs, by-7);
     const nx = bx + Math.min(cw, maxMM)*gs;
     ctx.fillStyle = holding ? '#fff' : 'rgba(255,255,255,.5)';
     ctx.fillRect(bx, by+bh*0.3, Math.max(0,nx-bx), bh*0.4);
     ctx.fillRect(nx-1.5, by-2, 3, bh+4);
-    ctx.font = 'bold 22px system-ui,sans-serif'; ctx.textAlign='left';
-    ctx.fillStyle = cw < bp && cw>0 ? '#ff8a70' : cw > UDON ? '#ccc' : '#fff';
-    ctx.fillText(cw.toFixed(2)+' mm', gx+14, gy+26);
-    ctx.font='12px system-ui,sans-serif'; ctx.textAlign='right';
-    const sp = curSpeed();
-    ctx.fillStyle = sp > 7 ? '#ff8a70' : 'rgba(245,234,215,.7)';
-    ctx.fillText(`送り ${sp.toFixed(1)}mm/s`, gx+gw-14, gy+20);
-    ctx.fillStyle = dry > .5 ? '#ff8a70' : 'rgba(245,234,215,.7)';
-    ctx.fillText(`乾燥 +${(bp-BREAK0).toFixed(2)}mm`, gx+gw-14, gy+36);
+    ctx.font='11px system-ui,sans-serif'; ctx.fillStyle='rgba(245,234,215,.55)'; ctx.textAlign='center';
+    if (gh > 170) ctx.fillText('白い棒が緑・金色のときに離すと◎', gx+gw/2, by+bh+38);
 
     // ポップアップ
     ctx.textAlign='center';
-    popups = popups.filter(p => now - p.t < 900);
+    popups = popups.filter(p => now - p.t < 1000);
     for (const p of popups){
-      const k = (now-p.t)/900;
-      ctx.globalAlpha = 1-k; ctx.fillStyle = p.color; ctx.font='bold 22px "Hiragino Mincho ProN","Yu Mincho",serif';
+      const k = (now-p.t)/1000;
+      ctx.globalAlpha = 1-k; ctx.fillStyle = p.color; ctx.font='bold 21px "Hiragino Mincho ProN","Yu Mincho",serif';
       ctx.strokeStyle='rgba(0,0,0,.6)'; ctx.lineWidth=4;
       ctx.strokeText(p.text, W/2, dY + dH/2 - k*40); ctx.fillText(p.text, W/2, dY + dH/2 - k*40);
     }
     ctx.globalAlpha = 1;
     ctx.restore();
   }
-  function roundRect(x,y,w,h,r){ ctx.beginPath(); ctx.moveTo(x+r,y); ctx.arcTo(x+w,y,x+w,y+h,r); ctx.arcTo(x+w,y+h,x,y+h,r); ctx.arcTo(x,y+h,x,y,r); ctx.arcTo(x,y,x+w,y,r); ctx.closePath(); }
 
   let last = performance.now();
   function loop(now){
@@ -527,7 +844,13 @@
     draw(now, dt);
     requestAnimationFrame(loop);
   }
+
+  // ---- 起動 ----
   reset(); resize(); requestAnimationFrame(loop);
+  initFirebase();
+  if (!myName) openName();
+  else if (!store.get('soba_tut', false)) { only(null); startTutorial(); }
+  else goHome();
 })();
 </script>
 </body>
