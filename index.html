@@ -7,8 +7,19 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#2b1d14">
+<meta name="description" content="長押しで包丁を送って、離して切る。ぎりぎりまで細く切って、何本切れるか勝負！スマホでもPCでも無料で遊べる和風タイミングゲーム。">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="極細そば切り名人">
 <meta property="og:title" content="極細そば切り名人">
-<meta property="og:description" content="ぎりぎりまで細く切って、何本切れるか勝負！">
+<meta property="og:description" content="ぎりぎりまで細く切って、何本切れるか勝負！1.0mm未満はぶち切れ。">
+<meta property="og:url" content="https://soba.emojiclash.com/">
+<meta property="og:image" content="https://soba.emojiclash.com/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="極細そば切り名人">
+<meta name="twitter:description" content="ぎりぎりまで細く切って、何本切れるか勝負！1.0mm未満はぶち切れ。">
+<meta name="twitter:image" content="https://soba.emojiclash.com/og.png">
 <style>
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
   html,body{margin:0;height:100%;background:#2b1d14;color:#f5ead7;font-family:"Hiragino Mincho ProN","Yu Mincho","Noto Serif JP",serif;overflow:hidden;touch-action:none;overscroll-behavior:none;position:fixed;inset:0}
@@ -80,6 +91,7 @@
   #newTitles .tt{font-size:13px;margin:3px}
   .gsel button{display:block;width:100%;margin:8px 0;text-align:left;font-family:system-ui,sans-serif;letter-spacing:0;font-size:15px}
   .gsel button small{display:block;font-size:12px;opacity:.8}
+  #shImg{-webkit-touch-callout:default;-webkit-user-select:auto;user-select:auto}
   .hidden{display:none!important}
   small{opacity:.7}
   @media (max-width:380px){ #hud{gap:7px;font-size:12px} #hud b{font-size:16px} .ic{padding:5px 7px;font-size:12px} .title{font-size:26px} }
@@ -102,6 +114,18 @@
 <div id="tutBar" class="hidden">
   <div id="tutText"></div>
   <div class="row"><span id="tutProg"></span><button id="tutSkip">スキップ</button></div>
+</div>
+
+<!-- 引っ越し案内（旧サイトだけ） -->
+<div id="moveScr" class="overlay hidden">
+  <div class="card">
+    <h2>🚚 お引っ越し</h2>
+    <p>極細そば切り名人は<b>新しい住所</b>に引っ越しました！</p>
+    <p style="font-size:18px;font-weight:bold;color:#a8321e" id="moveAddr"></p>
+    <p>下のボタンを押すと、<b>自己ベスト・称号・名前・ゴースト記録</b>をそのまま持って移動できます。</p>
+    <button class="wide gold" id="moveGo">記録を持って引っ越す</button>
+    <button class="sub" id="moveLater" style="font-size:12px">今回はこのまま遊ぶ</button>
+  </div>
 </div>
 
 <!-- 名前設定 -->
@@ -188,6 +212,19 @@
   </div>
 </div>
 
+<!-- 結果画像シェア -->
+<div id="shareScr" class="overlay hidden" style="z-index:7">
+  <div class="card">
+    <h2>結果をシェア</h2>
+    <img id="shImg" alt="結果画像" style="width:100%;border-radius:10px;box-shadow:0 4px 14px #0005;margin:4px 0 8px">
+    <button class="wide x hidden" id="shNative">📤 画像つきでシェア（Xなど）</button>
+    <button class="wide sub" id="shSave">⬇ 画像を保存</button>
+    <button class="wide x" id="shX">𝕏 でポスト（文とリンク）</button>
+    <p id="shHint" style="font-size:12px;margin:2px 0 6px"></p>
+    <button class="sub" id="shClose" style="font-size:13px">とじる</button>
+  </div>
+</div>
+
 <!-- ランキング -->
 <div id="rankScr" class="overlay hidden">
   <div class="card" style="height:100%;max-height:660px;overflow:hidden">
@@ -226,7 +263,49 @@ const FIREBASE_CONFIG = {
   appId: "1:7816139816:web:e6faae3ebb9a87949fd11d"
 };
 
+// =====================================================================
+//  ★新しい住所★（独自ドメイン）。旧サイト(github.io)を開いた人はここへ案内されます
+// =====================================================================
+const NEW_HOME = 'https://soba.emojiclash.com/';
+
 (() => {
+  // ===== 引っ越し（旧サイト → 新しい住所）=====
+  const MOVE_KEYS = ['soba_best_v2','soba_best_ta','soba_best_one','soba_name','soba_history','soba_stats','soba_titles','soba_eq','soba_best_replay','soba_tut','soba_sound'];
+  const IS_OLD_SITE = /\.github\.io$/.test(location.hostname) && NEW_HOME && !NEW_HOME.includes(location.hostname);
+  let movedIn = false;
+  (function importFromHash(){
+    const m = location.hash.match(/import=([^&]+)/);
+    if (!m) return;
+    try{
+      const data = JSON.parse(decodeURIComponent(escape(atob(decodeURIComponent(m[1])))));
+      const get = k => { try{ const v = localStorage.getItem(k); return v === null ? null : JSON.parse(v); }catch(e){ return null; } };
+      const put = (k, v) => { try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} };
+      const cur = {}; MOVE_KEYS.forEach(k => cur[k] = get(k));
+      const num = (a, b, lower) => a == null ? b : b == null ? a : (lower ? Math.min(a, b) : Math.max(a, b));
+      put('soba_best_v2', num(cur.soba_best_v2, data.soba_best_v2) || 0);
+      put('soba_best_ta', num(cur.soba_best_ta, data.soba_best_ta) || 0);
+      const one = num(cur.soba_best_one, data.soba_best_one, true); if (one != null) put('soba_best_one', one);
+      if (!cur.soba_name && data.soba_name) put('soba_name', data.soba_name);
+      put('soba_titles', [...new Set([...(cur.soba_titles || []), ...(data.soba_titles || [])])]);
+      if (!cur.soba_eq && data.soba_eq) put('soba_eq', data.soba_eq);
+      const st = cur.soba_stats || {}, ds = data.soba_stats || {};
+      put('soba_stats', { plays:(st.plays||0)+(ds.plays||0), total:(st.total||0)+(ds.total||0), ones:(st.ones||0)+(ds.ones||0) });
+      const hist = [...(cur.soba_history || []), ...(data.soba_history || [])].sort((a,b) => b.s - a.s || a.a - b.a).slice(0,10);
+      put('soba_history', hist);
+      const rc = cur.soba_best_replay, rd = data.soba_best_replay;
+      if (rd && (!rc || rd.score > rc.score)) put('soba_best_replay', rd);
+      if (data.soba_tut) put('soba_tut', true);
+      movedIn = true;
+    }catch(e){ console.warn('import', e); }
+    window.history.replaceState(null, '', location.pathname + location.search);
+  })();
+  function moveUrl(){
+    const data = {};
+    MOVE_KEYS.forEach(k => { try{ const v = localStorage.getItem(k); if (v !== null) data[k] = JSON.parse(v); }catch(e){} });
+    const b64 = btoa(unescape(encodeURIComponent(JSON.stringify(data))));
+    return NEW_HOME + location.search + '#import=' + encodeURIComponent(b64);
+  }
+
   // ===== 難易度設定 =====
   const DOUGH = 60;            // 生地の幅 mm
   const BREAK0 = 1.0;          // 開始時のぶち切れライン mm
@@ -562,7 +641,7 @@ const FIREBASE_CONFIG = {
   //  画面遷移
   // =========================================================
   let state = 'home';
-  const OVERLAYS = ['nameScr','home','ghostSel','tutCard','end','rankScr','titleScr'];
+  const OVERLAYS = ['shareScr','moveScr','nameScr','home','ghostSel','tutCard','end','rankScr','titleScr'];
   function only(id){ OVERLAYS.forEach(o => o === id ? show(o) : hide(o)); }
 
   function goHome(){
@@ -844,7 +923,7 @@ const FIREBASE_CONFIG = {
   }
 
   // ---- 終了処理 ----
-  let lastShare = '', lastRankText = '';
+  let lastShare = '', lastRankText = '', lastRes = null;
   function commonStats(){
     stats.plays++; if (mode !== 'one') stats.total += good;
     if (mode === 'one') stats.ones++;
@@ -885,6 +964,7 @@ const FIREBASE_CONFIG = {
       $('score').textContent = width.toFixed(2); $('unit').textContent = 'mm';
       lastShare = `極細そば切り名人【一本勝負】で${kind === 'break' ? 'ぶち切れた' : 'うどんになった'}…`;
     }
+    lastRes = { mode:'one', kind, width, diff, rank: rankTxt, isBest, head: $('endTitle').textContent };
     $('rank').textContent = rankTxt + (isBest ? ' 🎉自己ベスト' : '');
     $('detail').innerHTML = `ぶち切れライン <b>1.00mm</b> ／ あなた <b>${width.toFixed(3)}mm</b><br>自己ベスト ${bestOne == null ? '-' : '+' + bestOne.toFixed(3) + 'mm'}`;
     $('worldRank').textContent = '';
@@ -948,6 +1028,9 @@ const FIREBASE_CONFIG = {
       `平均の太さ <b>${avg.toFixed(2)}mm</b>　最大連続 <b>${maxCombo}</b>本　神切り最大 <b>${maxGod}</b>連<br>ぶち切れ ${breaks}回 / うどん ${udonN}本 / ${Math.min(elapsed(), mode==='ta'?TA_TIME:999).toFixed(1)}秒`;
     const modeName = mode === 'ta' ? '【タイムアタック30秒】' : mode === 'ghost' ? '【ゴーストバトル】' : '';
     lastShare = `極細そば切り名人${modeName}で ${good}本 切った！` + (ghostRes ? `\n${ghostRes}` : '');
+    lastRes = { mode, head: title, score: good, rank: mode === 'ta' ? taRank(good) : rankOf(good), isBest: isBest && good > 0,
+      avg, maxGod, maxCombo, breaks, udonN, ghostRes,
+      bars: mode === 'ta' ? cuts.map(c => ({w:1, kind: c.k === 'o' ? 'ok' : c.k === 'b' ? 'break' : 'udon'})) : strands.map(x => ({w:x.w, kind:x.kind})) };
     $('worldRank').textContent = fbState === 'off' || good === 0 ? '' : '世界ランキング集計中…';
     bgmStop(); sfxEnd(title !== '生地崩壊' && title !== '敗北…');
     showNewTitles();
@@ -987,11 +1070,109 @@ const FIREBASE_CONFIG = {
     if (n >= 10) return '【のんびり】';
     return '【昼寝中】';
   }
+  // ===== 結果画像 =====
+  const shareText = () => `${lastShare}${lastRankText ? '（'+lastRankText+'）' : ''}\n#極細そば切り名人`;
+  const shareUrl = () => 'https://soba.emojiclash.com/';
+  function drawResult(){
+    const W = 1200, H = 630, c = document.createElement('canvas'); c.width = W; c.height = H;
+    const g = c.getContext('2d'), r = lastRes || {};
+    const SERIF = '"Hiragino Mincho ProN","Yu Mincho","Noto Serif JP",serif', SANS = 'system-ui,"Hiragino Sans","Noto Sans JP",sans-serif';
+    // 背景：まな板
+    const bg = g.createLinearGradient(0,0,0,H); bg.addColorStop(0,'#3a2717'); bg.addColorStop(1,'#1e140c');
+    g.fillStyle = bg; g.fillRect(0,0,W,H);
+    g.strokeStyle = 'rgba(255,220,170,.05)'; g.lineWidth = 2;
+    for (let i=0;i<22;i++){ const y = i*30+10; g.beginPath(); g.moveTo(0,y); g.bezierCurveTo(W*.3,y+8,W*.6,y-8,W,y+4); g.stroke(); }
+    // 麺の帯
+    const bx = 50, by = 430, bw = W-100, bh = 110;
+    g.fillStyle = '#5a3d22'; g.fillRect(bx-8, by-8, bw+16, bh+16);
+    g.fillStyle = '#d9c697'; g.fillRect(bx, by, bw, bh);
+    const bars = r.mode === 'one' ? [{w:r.width, kind:r.kind}] : (r.bars || []);
+    const total = r.mode === 'one' ? 2.5 : r.mode === 'ta' ? Math.max(1, bars.length) : DOUGH;
+    let x = bx;
+    bars.forEach((b, i) => {
+      const ww = (b.w/total)*bw; const sw = Math.max(1.5, ww - Math.min(3, ww*.25));
+      if (b.kind === 'break'){ g.fillStyle = '#c0392b'; for (let k=0;k<5;k++) g.fillRect(x, by + ((i*37+k*29)%90), sw, 10); }
+      else { g.fillStyle = b.kind === 'udon' ? '#f4ecd6' : '#b8a06c'; g.fillRect(x, by, sw, bh); g.fillStyle = 'rgba(0,0,0,.18)'; g.fillRect(x+sw-1, by, 1, bh); }
+      x += ww;
+    });
+    if (r.mode === 'one'){ const lx = bx + (BREAK0/2.5)*bw; g.fillStyle = '#e0412c'; g.fillRect(lx-3, by, 6, bh); g.font = `bold 20px ${SANS}`; g.fillStyle = '#7a1f12'; g.textAlign = 'right'; g.fillText('ぶち切れライン 1.00mm', lx-12, by+bh-14); g.textAlign = 'left'; }
+    // タイトル
+    g.fillStyle = '#f5ead7'; g.font = `bold 46px ${SERIF}`; g.textBaseline = 'alphabetic';
+    g.fillText('極細そば切り名人', 50, 88);
+    const modeLabel = {normal:'通常', ta:'タイムアタック30秒', one:'一本勝負', ghost:'ゴーストバトル'}[r.mode] || '';
+    g.font = `bold 22px ${SANS}`; const mw = g.measureText(modeLabel).width + 28;
+    g.fillStyle = '#a8321e'; roundR(g, 50, 108, mw, 36, 18); g.fill();
+    g.fillStyle = '#fff'; g.fillText(modeLabel, 64, 134);
+    if (r.head && r.head !== modeLabel){ g.fillStyle = '#ffd27a'; g.fillText(r.head, 50 + mw + 16, 134); }
+    // スコア
+    let big, unit;
+    if (r.mode === 'one'){ big = r.kind === 'ok' ? '+' + r.diff.toFixed(2) : r.width.toFixed(2); unit = 'mm'; }
+    else { big = String(r.score); unit = '本'; }
+    g.fillStyle = '#ffd27a'; g.font = `bold 170px ${SERIF}`; g.shadowColor = 'rgba(255,190,80,.45)'; g.shadowBlur = 30;
+    g.fillText(big, 50, 340); const bwid = g.measureText(big).width; g.shadowBlur = 0;
+    g.fillStyle = '#f5ead7'; g.font = `bold 58px ${SERIF}`; g.fillText(unit, 62 + bwid, 336);
+    g.font = `bold 38px ${SERIF}`; g.fillStyle = '#fff';
+    g.fillText(r.rank || '', 50, 398);
+    if (r.isBest){ g.font = `bold 22px ${SANS}`; g.fillStyle = '#ff8a70'; g.fillText('🎉 自己ベスト更新', 62 + bwid + 90, 260); }
+    // 右側のデータ
+    const rows = [];
+    if (r.mode === 'one'){ rows.push(['あなたの太さ', r.width.toFixed(3)+'mm']); rows.push(['自己ベスト', bestOne == null ? '-' : '+'+bestOne.toFixed(3)+'mm']); }
+    else {
+      rows.push(['平均の太さ', (r.avg||0).toFixed(2)+'mm']); rows.push(['神切り最大', (r.maxGod||0)+'連']);
+      rows.push(['最大連続', (r.maxCombo||0)+'本']); rows.push(['ぶち切れ', (r.breaks||0)+'回']);
+    }
+    if (lastRankText) rows.push(['世界ランキング', lastRankText.replace('世界','')]);
+    const rx = 780, ry = 178;
+    g.fillStyle = 'rgba(0,0,0,.35)'; roundR(g, rx-24, ry-44, 394, rows.length*52+30, 16); g.fill();
+    rows.forEach((row, i) => {
+      const y = ry + i*52;
+      g.font = `22px ${SANS}`; g.fillStyle = 'rgba(245,234,215,.75)'; g.fillText(row[0], rx, y);
+      g.font = `bold 30px ${SANS}`; g.fillStyle = row[0] === '世界ランキング' ? '#ffd27a' : '#fff';
+      g.textAlign = 'right'; g.fillText(row[1], rx + 346, y); g.textAlign = 'left';
+    });
+    if (r.ghostRes){ g.font = `bold 22px ${SANS}`; g.fillStyle = '#8fd8ff'; g.fillText(r.ghostRes.slice(0, 28), rx-10, ry + rows.length*52 + 26); }
+    // フッター
+    g.font = `bold 24px ${SANS}`; g.fillStyle = '#f5ead7';
+    const who = (titleName() ? '【' + titleName() + '】' : '') + myName;
+    g.fillText('職人 ' + who, 50, 600);
+    g.textAlign = 'right'; g.fillStyle = '#ffd27a'; g.fillText('soba.emojiclash.com', W-50, 600);
+    g.font = `20px ${SANS}`; g.fillStyle = 'rgba(245,234,215,.6)'; g.fillText('#極細そば切り名人', W-50, 572); g.textAlign = 'left';
+    return c;
+  }
+  function roundR(g,x,y,w,h,r){ g.beginPath(); g.moveTo(x+r,y); g.arcTo(x+w,y,x+w,y+h,r); g.arcTo(x+w,y+h,x,y+h,r); g.arcTo(x,y+h,x,y,r); g.arcTo(x,y,x+w,y,r); g.closePath(); }
+  let shBlob = null, shUrl = null;
   $('share').onclick = () => {
-    const text = `${lastShare}${lastRankText ? '（'+lastRankText+'）' : ''}\n#極細そば切り名人`;
-    const url = location.origin + location.pathname;
-    window.open('https://x.com/intent/post?text='+encodeURIComponent(text)+'&url='+encodeURIComponent(url), '_blank');
+    sfxClick();
+    const c = drawResult();
+    if (shUrl){ URL.revokeObjectURL(shUrl); shUrl = null; }
+    $('shImg').src = c.toDataURL('image/png');
+    shBlob = null;
+    c.toBlob(b => {
+      shBlob = b;
+      let can = false;
+      try{ const f = new File([b], 'soba-result.png', {type:'image/png'}); can = !!(navigator.canShare && navigator.canShare({files:[f]})); }catch(e){}
+      $('shNative').classList.toggle('hidden', !can);
+      $('shHint').textContent = can ? '「画像つきでシェア」→ Xを選ぶと、画像と文がそのままポストに入ります'
+                                    : '「画像を保存」してから「𝕏でポスト」を押し、保存した画像を添付してね';
+    }, 'image/png');
+    show('shareScr');
   };
+  $('shNative').onclick = async () => {
+    if (!shBlob) return;
+    const f = new File([shBlob], 'soba-result.png', {type:'image/png'});
+    try{ await navigator.share({ files:[f], text: shareText() + '\n' + shareUrl() }); }catch(e){ console.warn('share', e); }
+  };
+  $('shSave').onclick = () => {
+    if (!shBlob) return;
+    shUrl = URL.createObjectURL(shBlob);
+    const a = document.createElement('a'); a.href = shUrl; a.download = 'soba-result.png';
+    document.body.appendChild(a); a.click(); a.remove();
+    $('shHint').textContent = '保存しました。次に「𝕏でポスト」を押して、画像を添付してね（スマホは画像を長押しでも保存できます）';
+  };
+  $('shX').onclick = () => {
+    window.open('https://x.com/intent/post?text='+encodeURIComponent(shareText())+'&url='+encodeURIComponent(shareUrl()), '_blank');
+  };
+  $('shClose').onclick = () => { sfxClick(); hide('shareScr'); };
   $('challenge').onclick = () => {
     if (!uid) return;
     const url = location.origin + location.pathname + '?ghost=' + uid;
@@ -1215,9 +1396,19 @@ const FIREBASE_CONFIG = {
   // ---- 起動 ----
   reset(); resize(); updateHud(); requestAnimationFrame(loop);
   initFirebase();
-  if (!myName) openName();
-  else if (!store.get('soba_tut', false)) { only(null); startTutorial(); }
-  else goHome();
+  function boot(){
+    if (!myName) openName();
+    else if (!store.get('soba_tut', false)) { only(null); startTutorial(); }
+    else goHome();
+    if (movedIn){ const p = $('home').querySelector('p:last-child'); if (p) p.innerHTML = '<b style="color:#2f8a3e">🚚 引っ越し完了！記録と称号を引き継ぎました</b>'; }
+  }
+  $('moveGo').onclick = () => { sfxClick(); location.href = moveUrl(); };
+  $('moveLater').onclick = () => { sfxClick(); boot(); };
+  if (IS_OLD_SITE){
+    state = 'move';
+    $('moveAddr').textContent = NEW_HOME.replace(/^https?:\/\//,'').replace(/\/$/,'');
+    only('moveScr');
+  } else boot();
 })();
 </script>
 </body>
